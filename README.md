@@ -1,7 +1,7 @@
 # Witbook Backend
 
-[![CI](https://github.com/yourusername/witbook-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/witbook-backend/actions/workflows/ci.yml)
-[![CD](https://github.com/yourusername/witbook-backend/actions/workflows/cd.yml/badge.svg)](https://github.com/yourusername/witbook-backend/actions/workflows/cd.yml)
+[![CI](https://github.com/canyouhearthemusic/witbook-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/canyouhearthemusic/witbook-backend/actions/workflows/ci.yml)
+[![CD](https://github.com/canyouhearthemusic/witbook-backend/actions/workflows/cd.yml/badge.svg)](https://github.com/canyouhearthemusic/witbook-backend/actions/workflows/cd.yml)
 
 A Django-based backend for a book tracking application with features for managing reading sessions, book collections, and user profiles.
 
@@ -34,7 +34,7 @@ A Django-based backend for a book tracking application with features for managin
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/witbook-backend.git
+   git clone https://github.com/canyouhearthemusic/witbook-backend.git
    cd witbook-backend
    ```
 
@@ -75,14 +75,15 @@ pytest --cov=./ --cov-report=term
 
 ### Linting and Formatting
 
-Format code with Black:
+Format code with Black and isort using the custom command:
 ```
-black .
+python manage.py format_code
 ```
 
-Sort imports with isort:
+Or manually:
 ```
-isort .
+black .
+isort --profile black .
 ```
 
 Lint with flake8:

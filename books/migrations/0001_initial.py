@@ -16,34 +16,81 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Book',
+            name="Book",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('book_photo', models.ImageField(blank=True, null=True, upload_to='book_photos/')),
-                ('name', models.CharField(max_length=255)),
-                ('author', models.CharField(max_length=255)),
-                ('pages_amount', models.IntegerField()),
-                ('description', models.TextField()),
-                ('reading_status', models.CharField(choices=[('will_read', 'Буду читать'), ('now_reading', 'Читаю сейчас'), ('finished_reading', 'Прочитана')], max_length=20)),
-                ('star_rate', models.FloatField(blank=True, null=True)),
-                ('average_emotion', models.IntegerField(blank=True, null=True)),
-                ('current_page', models.IntegerField(blank=True, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "book_photo",
+                    models.ImageField(blank=True, null=True, upload_to="book_photos/"),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("author", models.CharField(max_length=255)),
+                ("pages_amount", models.IntegerField()),
+                ("description", models.TextField()),
+                (
+                    "reading_status",
+                    models.CharField(
+                        choices=[
+                            ("will_read", "Буду читать"),
+                            ("now_reading", "Читаю сейчас"),
+                            ("finished_reading", "Прочитана"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("star_rate", models.FloatField(blank=True, null=True)),
+                ("average_emotion", models.IntegerField(blank=True, null=True)),
+                ("current_page", models.IntegerField(blank=True, null=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ReadingSession',
+            name="ReadingSession",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('current_page', models.IntegerField()),
-                ('session_duration', models.IntegerField()),
-                ('notes', models.JSONField(default=list)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('from_page_to_page', models.CharField(max_length=100)),
-                ('from_time_to_time', models.CharField(max_length=11)),
-                ('book', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sessions', to='books.book')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("current_page", models.IntegerField()),
+                ("session_duration", models.IntegerField()),
+                ("notes", models.JSONField(default=list)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("from_page_to_page", models.CharField(max_length=100)),
+                ("from_time_to_time", models.CharField(max_length=11)),
+                (
+                    "book",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="sessions",
+                        to="books.book",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]
-
