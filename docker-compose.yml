@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    volumes:
+      - ./:/code
+      - media_volume:/code/media
+      - static_volume:/code/static_root
+    ports:
+      - "8080:8000"
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    restart: always
+    command: >
+      sh -c "python manage.py migrate && 
+             python manage.py collectstatic --noinput &&
+             gunicorn witbook.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=witbook
+    ports:
+      - "5432:5432"
+    restart: always
+
+volumes:
+  postgres_data:
+  media_volume:
+  static_volume:
