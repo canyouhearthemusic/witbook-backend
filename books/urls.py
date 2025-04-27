@@ -1,10 +1,11 @@
 from django.urls import path
+
 from .views import (
     BookCreateView,
+    BookDeleteView,
+    BookDetailsView,
     BookListView,
     ReadingSessionCreateView,
-    BookDetailsView,
-    BookDeleteView,
 )
 
 urlpatterns = [

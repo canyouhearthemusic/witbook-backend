@@ -61,4 +61,4 @@ class TestUserAPI:
         response = api_client.patch(url, data, format="json")
         assert response.status_code == status.HTTP_200_OK
         created_user.refresh_from_db()
-        assert created_user.email == "updated@example.com" 
+        assert created_user.email == "updated@example.com"

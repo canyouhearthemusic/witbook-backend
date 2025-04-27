@@ -70,4 +70,4 @@ class TestBookAPI:
         url = reverse("book_delete", kwargs={"book_id": book.id})
         response = authenticated_client.delete(url)
         assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert Book.objects.count() == 0 
+        assert Book.objects.count() == 0
