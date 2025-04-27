@@ -7,12 +7,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import CustomUser
-from .serializers import (
-    UserLoginSerializer,
-    UserProfileSerializer,
-    UserRefreshTokenSerializer,
-    UserRegistrationSerializer,
-)
+from .serializers import (UserLoginSerializer, UserProfileSerializer,
+                          UserRefreshTokenSerializer,
+                          UserRegistrationSerializer)
 
 
 class UserRegistrationView(APIView):
@@ -85,6 +82,28 @@ class UserProfileUpdateView(APIView):
         operation_description="Обновление профиля пользователя",
     )
     def post(self, request):
+        serializer = UserProfileSerializer(
+            request.user, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            try:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response(
+                    {"error": f"Ошибка обновления профиля: {str(e)}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        return Response(
+            {"error": "Ошибка валидации данных"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    @swagger_auto_schema(
+        request_body=UserProfileSerializer,
+        responses={200: UserProfileSerializer},
+        operation_description="Обновление профиля пользователя через PATCH",
+    )
+    def patch(self, request):
         serializer = UserProfileSerializer(
             request.user, data=request.data, partial=True
         )

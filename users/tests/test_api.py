@@ -14,6 +14,7 @@ def api_client():
 @pytest.fixture
 def user_data():
     return {
+        "username": "testuser",
         "email": "test@example.com",
         "password": "testpassword123",
         "password2": "testpassword123",
@@ -23,7 +24,9 @@ def user_data():
 @pytest.fixture
 def created_user():
     return CustomUser.objects.create_user(
-        email="existing@example.com", password="existingpassword"
+        username="existinguser",
+        email="existing@example.com",
+        password="existingpassword",
     )
 
 
@@ -33,6 +36,8 @@ class TestUserAPI:
         url = reverse("register")
         response = api_client.post(url, user_data, format="json")
         assert response.status_code == status.HTTP_201_CREATED
+        assert "access_token" in response.data
+        assert "refresh_token" in response.data
         assert CustomUser.objects.count() == 1
         assert CustomUser.objects.get().email == "test@example.com"
 
@@ -44,21 +49,21 @@ class TestUserAPI:
         }
         response = api_client.post(url, data, format="json")
         assert response.status_code == status.HTTP_200_OK
-        assert "access" in response.data
-        assert "refresh" in response.data
+        assert "access_token" in response.data
+        assert "refresh_token" in response.data
 
     def test_user_profile(self, api_client, created_user):
         api_client.force_authenticate(user=created_user)
         url = reverse("profile")
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert response.data["email"] == "existing@example.com"
+        assert response.data["username"] == "existinguser"
 
     def test_user_profile_update(self, api_client, created_user):
         api_client.force_authenticate(user=created_user)
         url = reverse("update_profile")
-        data = {"email": "updated@example.com"}
+        data = {"username": "updateduser"}
         response = api_client.patch(url, data, format="json")
         assert response.status_code == status.HTTP_200_OK
         created_user.refresh_from_db()
-        assert created_user.email == "updated@example.com"
+        assert created_user.username == "updateduser"

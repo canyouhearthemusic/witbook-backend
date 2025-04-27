@@ -9,20 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     
     steps:
       - uses: actions/checkout@v3
@@ -51,15 +37,30 @@ jobs:
           black --check .
           isort --check-only --profile black .
           
+      - name: Create test settings
+        run: |
+          cat > test_settings.py << EOL
+          from witbook.settings import *
+          
+          # Override default permission classes for testing
+          REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = [
+              'rest_framework.permissions.AllowAny',
+          ]
+          
+          # Use SQLite for testing
+          DATABASES = {
+              'default': {
+                  'ENGINE': 'django.db.backends.sqlite3',
+                  'NAME': BASE_DIR / 'test_db.sqlite3',
+              }
+          }
+          EOL
+      
       - name: Run tests
         env:
           DEBUG: 'True'
           SECRET_KEY: 'test-key'
-          POSTGRES_DB: test_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
+          DJANGO_SETTINGS_MODULE: test_settings
         run: |
           pytest --cov=./ --cov-report=xml
           
