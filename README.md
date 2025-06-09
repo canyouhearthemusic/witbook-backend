@@ -108,13 +108,6 @@ The following environment variables can be set in the `.env` file:
 - `POSTGRES_HOST`: PostgreSQL host
 - `POSTGRES_PORT`: PostgreSQL port
 
-## Deployment
-
-The project includes CI/CD configuration with GitHub Actions:
-
-1. CI workflow: Runs linting and tests on all branches
-2. CD workflow: Builds and pushes a Docker image to Docker Hub on main branch and tags
-
 ## Project Structure
 
 ```
@@ -133,15 +126,3 @@ witbook-backend/
 ├── README.md             # Project documentation
 └── requirements.txt      # Python dependencies
 ```
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Commit your changes (`git commit -m 'Add some feature'`)
-4. Push to the branch (`git push origin feature/my-feature`)
-5. Create a new Pull Request 
